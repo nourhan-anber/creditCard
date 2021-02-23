@@ -28,6 +28,7 @@
               "src/assets"
             ],
             "styles": [
+              "node_modules/bootstrap/dist/css/bootstrap.min.css",
               "src/styles.scss"
             ],
             "scripts": []
@@ -123,6 +124,10 @@
           }
         }
       }
-    }},
-  "defaultProject": "tdTask"
+    }
+  },
+  "defaultProject": "tdTask",
+  "cli": {
+    "analytics": "bac92487-ff8f-41cf-9370-ed234be41283"
+  }
 }
