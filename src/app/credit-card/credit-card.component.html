@@ -1,5 +1,11 @@
-<div class="mb-3">
-    <label for="creditCardNumber" class="form-label">Credit Card Number: </label>
-    <input type="text" class="form-control" id="creditCardNumber" placeholder="1111 1111 1111 1111">
+<div>
+    <div class="mb-3">
+        <label for="creditCardNumber" class="form-label">Credit Card Number: </label>
+        <input type="text" class="form-control" id="creditCardNumber" [(ngModel)]="creditCardNumber" placeholder="1111 1111 1111 1111">
+    </div>
+    <button (click)="submit()" class="btn btn-primary">OK</button>
 </div>
-<button (click)="submit()" class="btn btn-primary">OK</button>
+<div class="error" *ngIf="errorMessage">
+    <p>{{errorMessage}}</p>
+</div>
+

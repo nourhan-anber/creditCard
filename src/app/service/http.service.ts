@@ -4,4 +4,10 @@ import { Injectable } from "@angular/core";
 
 export default class httpService{
 
+    addCard(cardNumber: string){
+        localStorage.setItem('number', cardNumber);
+    }
+    getCard() : string{
+        return localStorage.getItem('number');
+    }
 }
