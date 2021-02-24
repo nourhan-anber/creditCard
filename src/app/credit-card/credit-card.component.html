@@ -18,10 +18,12 @@
                 The Credit card number should be at least 13 digits.
             </div>
             <div *ngIf="creditCardForm.controls.creditCardNumber.errors.invalid">
-                Name must be at least 4 characters long.
+                The Credit card number should start with 4 , 5 or 37.
             </div>
         </div>
         <button class="btn btn-primary">OK</button>
-
+        <div clsas="alert alert-success" *ngIf="successMessage" role="alert">
+            {{successMessage}}
+        </div>
     </form>
 </div>

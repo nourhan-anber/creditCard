@@ -6,31 +6,34 @@ import java.util.UUID;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestBody;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.ResponseBody;
 import org.springframework.web.bind.annotation.RestController;
 
-import com.nourhan.backend.dao.CreditCardRepo;
 import com.nourhan.backend.model.CreditCard;
+import com.nourhan.backend.service.CreditCardService;
 
 @RestController
 public class CreditCardController {
 	
 	@Autowired
-	CreditCardRepo repo;
+	CreditCardService service;
 	
 	@GetMapping("/api/get/{token}")
 	@ResponseBody
 	public Optional<CreditCard> getCreditCard(@PathVariable String token) {
-		return repo.findById(token);
+		return service.findRepo(token);
 	}
 	
-	@GetMapping("/api/add/{cardNumber}")
+	@RequestMapping(value="/api/add" ,method = RequestMethod.POST)
 	@ResponseBody
-	public CreditCard addCreditCard(@PathVariable String cardNumber) {
+	public CreditCard addCreditCard(@RequestBody CreditCard cardInfo) {
 		CreditCard creditCardObj = new  CreditCard();
-		creditCardObj.setCreditCardNumber(cardNumber);
+		creditCardObj.setCreditCardNumber(cardInfo.getCreditCardNumber());
 		creditCardObj.setToken(UUID.randomUUID().toString());
-		repo.save(creditCardObj);
+		service.saveRepo(creditCardObj);
 		return creditCardObj;
 	}
 }

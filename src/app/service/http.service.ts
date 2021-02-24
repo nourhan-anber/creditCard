@@ -12,10 +12,7 @@ export default class HttpService{
     }
     addCard(cardNumber: string){
        
-         this.http.get(this.baseUrl + 'add/' + cardNumber).subscribe((res : any)=>{
-            res.creditCardNumber = this.encrypt.encrypt(res.creditCardNumber);
-            localStorage.setItem('card', JSON.stringify(res));
-         })
+        return this.http.post(this.baseUrl + 'add', {"token": "", "creditCardNumber": this.encrypt.encrypt(cardNumber)});
     }
     getCard(token : string){
         return this.http.get(this.baseUrl + 'get/' + token);

@@ -1,7 +1,10 @@
 import { createElementCssSelector } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
 import { FormControl, FormGroup, MinLengthValidator, NgForm, NgModel, Validators } from '@angular/forms';
+import EncryptService from '../service/encrypt.service';
 import HttpService from '../service/http.service';
+
+
 
 @Component({
   selector: 'app-credit-card',
@@ -10,27 +13,28 @@ import HttpService from '../service/http.service';
 })
 export class CreditCardComponent implements OnInit {
 
-  errorMessage: string;
+  successMessage: string;
   creditCardForm: FormGroup = new FormGroup({
-    creditCardNumber: new FormControl([
+    creditCardNumber: new FormControl('',[
       Validators.minLength(13),
       Validators.maxLength(16),
-      (formControl) => {
-        if (formControl.value[0] == '4' || formControl.value[0] == '5' || (formControl.value[0] == '3' && formControl.value[1] == '7')) {
-          return { invalid: true };
+      (formControl)=>{
+       if(formControl.value[0] == '4' || formControl.value[0] == '5' || (formControl.value[0] == '3' && formControl.value[1] == '7')){
+          return;
+        }else{
+          return {invalid: true};
         }
       }
     ])
   });
   creditType: string;
 
-  constructor(private httpService: HttpService) {
+  constructor(private httpService: HttpService, private encrypt: EncryptService) {
     if(localStorage.getItem('card')){
       httpService.getCard(JSON.parse(localStorage.getItem('card')).token).subscribe((res: any)=>{
-        this.creditCardForm.controls.creditCardNumber.setValue(res.creditCardNumber);
+        this.creditCardForm.controls.creditCardNumber.setValue(encrypt.decrypt(res.creditCardNumber));
         this.setCreditCardType();
-      })
-      
+      }) 
     }
   }
 
@@ -39,9 +43,11 @@ export class CreditCardComponent implements OnInit {
   onSubmit() {
     const creditCardNumber = this.creditCardForm.controls.creditCardNumber;
     if (creditCardNumber.valid) {
-      if (creditCardNumber.value[0] == '4' || creditCardNumber.value[0] == '5' || (creditCardNumber.value[0] == '3' && creditCardNumber.value[1] == '7')) {
-        this.httpService.addCard(creditCardNumber.value);
-      }
+        this.httpService.addCard(creditCardNumber.value).subscribe((res : any)=>{
+          res.creditCardNumber = res.creditCardNumber;
+          localStorage.setItem('card', JSON.stringify(res));
+          this.successMessage = "Card added!";
+       })
     }
 
   }
