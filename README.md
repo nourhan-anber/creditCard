@@ -1,4 +1,8 @@
-# TdTask
+# This application  
+Prompts the user to enter a valid credit card number, creates a token and save the encrypted data in the local storage and h2 Database. When the application is refreshed it checks if there's a token then it retrieve the encrypted data from the database and decrypt the credit card number to the UI and it is displayed to the user along with the card type
+
+## A valid number 
+Should be between 13 to 16 digits and should starts with 4 or 5 or 37.
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 9.1.1.
 
