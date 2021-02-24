@@ -1,6 +1,12 @@
 # This application  
 Prompts the user to enter a valid credit card number, creates a token and save the encrypted data in the local storage and h2 Database. When the application is refreshed it checks if there's a token then it retrieve the encrypted data from the database and decrypt the credit card number to the UI and it is displayed to the user along with the card type
 
+# Demo link
+https://tdtask.nourhananber.com/
+
+# Explanation Video 
+https://www.youtube.com/watch?v=8vgMb3rsY2U&ab_channel=NourhanAnber
+
 ## A valid number 
 Should be between 13 to 16 digits and should starts with 4 or 5 or 37.
 

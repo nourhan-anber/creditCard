@@ -44,7 +44,6 @@ export class CreditCardComponent implements OnInit {
     const creditCardNumber = this.creditCardForm.controls.creditCardNumber;
     if (creditCardNumber.valid) {
         this.httpService.addCard(creditCardNumber.value).subscribe((res : any)=>{
-          res.creditCardNumber = res.creditCardNumber;
           localStorage.setItem('card', JSON.stringify(res));
           this.successMessage = "Card added!";
        })
