@@ -1,6 +1,7 @@
 import { createElementCssSelector } from '@angular/compiler';
 import { Component, OnInit } from '@angular/core';
-import httpService from '../service/http.service';
+import { FormControl, FormGroup, MinLengthValidator, NgForm, NgModel, Validators } from '@angular/forms';
+import HttpService from '../service/http.service';
 
 @Component({
   selector: 'app-credit-card',
@@ -9,26 +10,57 @@ import httpService from '../service/http.service';
 })
 export class CreditCardComponent implements OnInit {
 
-  creditCardNumber : string;
-  errorMessage : string;
-  
-  constructor(private httpService : httpService) { 
+  errorMessage: string;
+  creditCardForm: FormGroup = new FormGroup({
+    creditCardNumber: new FormControl([
+      Validators.minLength(13),
+      Validators.maxLength(16),
+      (formControl) => {
+        if (formControl.value[0] == '4' || formControl.value[0] == '5' || (formControl.value[0] == '3' && formControl.value[1] == '7')) {
+          return { invalid: true };
+        }
+      }
+    ])
+  });
+  creditType: string;
 
+  constructor(private httpService: HttpService) {
+    if(localStorage.getItem('card')){
+      httpService.getCard(JSON.parse(localStorage.getItem('card')).token).subscribe((res: any)=>{
+        this.creditCardForm.controls.creditCardNumber.setValue(res.creditCardNumber);
+        this.setCreditCardType();
+      })
+      
+    }
   }
 
   ngOnInit(): void {
   }
-
-  submit(){
-    this.errorMessage = "";
-    if(this.creditCardNumber.length >= 13 && this.creditCardNumber.length <= 16){
-      if(this.creditCardNumber[0] == '4' || this.creditCardNumber[0] == '5' || (this.creditCardNumber[0] == '3' && this.creditCardNumber[1] == '7')){
-        this.httpService.addCard(this.creditCardNumber);
-      }else{
-        this.errorMessage = "The Credit card number should starts with 4 or 5 or 37";
+  onSubmit() {
+    const creditCardNumber = this.creditCardForm.controls.creditCardNumber;
+    if (creditCardNumber.valid) {
+      if (creditCardNumber.value[0] == '4' || creditCardNumber.value[0] == '5' || (creditCardNumber.value[0] == '3' && creditCardNumber.value[1] == '7')) {
+        this.httpService.addCard(creditCardNumber.value);
       }
-    }else{
-      this.errorMessage = "The Credit card number should be between 13 and 16 digits";
     }
+
+  }
+
+  setCreditCardType() {
+    if (this.creditCardForm.controls.creditCardNumber.value) {
+      const firstChar = this.creditCardForm.controls.creditCardNumber.value[0];
+      const secondChar = this.creditCardForm.controls.creditCardNumber.value[1];
+      if (firstChar == '4') {
+        this.creditType = 'Visa';
+      } else if (firstChar == '5') {
+        this.creditType = 'Master';
+      } else if (firstChar == '3' && secondChar == '7') {
+        this.creditType = "AmericanExpress";
+      } else {
+        this.creditType = "";
+      }
+    }
+
   }
 }
+

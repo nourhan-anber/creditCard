@@ -1,11 +1,27 @@
 <div>
-    <div class="mb-3">
-        <label for="creditCardNumber" class="form-label">Credit Card Number: </label>
-        <input type="text" class="form-control" id="creditCardNumber" [(ngModel)]="creditCardNumber" placeholder="1111 1111 1111 1111">
-    </div>
-    <button (click)="submit()" class="btn btn-primary">OK</button>
-</div>
-<div class="error" *ngIf="errorMessage">
-    <p>{{errorMessage}}</p>
-</div>
+    <form [formGroup]="creditCardForm" (ngSubmit)="onSubmit()" validate>
+        <div class="mb-3 row">
+            
+                <label for="creditCardNumber" class="form-label">Credit Card Number: </label>
+                <div class="col-9">
+                <input type="text" class="form-control" id="creditCardNumber" name="creditCardNumber" minlength="13"
+                    maxlength="16" formControlName="creditCardNumber" placeholder="1111111111111111"
+                    (keyup)="setCreditCardType()">
+            </div>
+            <div *ngIf="creditType" class="col-3">
+                <img src="/assets/{{creditType}}.png" height="40">
+            </div>
+        </div>
+        <div *ngIf="creditCardForm.controls.creditCardNumber.invalid && (creditCardForm.controls.creditCardNumber.dirty || creditCardForm.controls.creditCardNumber.touched)"
+            class="alert alert-danger">
+            <div *ngIf="creditCardForm.controls.creditCardNumber.errors.minlength">
+                The Credit card number should be at least 13 digits.
+            </div>
+            <div *ngIf="creditCardForm.controls.creditCardNumber.errors.invalid">
+                Name must be at least 4 characters long.
+            </div>
+        </div>
+        <button class="btn btn-primary">OK</button>
 
+    </form>
+</div>

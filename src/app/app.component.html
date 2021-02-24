@@ -6,13 +6,9 @@
           <img src="/assets/logo.png" alt="" height="50" class="d-inline-block align-top">
         </a>
       </div>
-      <div class="col-4" *ngIf="creditCardNumber">
-        <div *ngIf="creditType" ><img src="/assets/{{creditType}}.png" height="40"></div>
-        Credit Card Number : {{creditCardNumber}}
-      </div>
     </nav>
   </header>
-  <div class="body mx-auto" *ngIf="!creditCardNumber">
+  <div class="body mx-auto">
     <app-credit-card></app-credit-card>
   </div>
 <footer>
